@@ -34,9 +34,13 @@ module Rurses
   end
 
   def get_key
+    is_special_key = -> (key) { !SPECIAL_KEYS[key].nil? }
+
     case (char = curses.getch)
-    when curses::KeyDefs::KEY_CODE_YES..curses::KeyDefs::KEY_MAX
+    when is_special_key
       SPECIAL_KEYS[char]
+    when 127
+      :BACKSPACE
     when curses::ERR
       nil
     else
